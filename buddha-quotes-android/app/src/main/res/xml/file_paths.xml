@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 이미지 공유용 임시 파일(QuoteSharer). 앱 캐시 폴더만 노출한다. -->
+    <cache-path name="shared" path="shared/" />
+</paths>

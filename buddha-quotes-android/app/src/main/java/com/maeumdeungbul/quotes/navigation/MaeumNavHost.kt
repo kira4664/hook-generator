@@ -9,10 +9,17 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.maeumdeungbul.quotes.ui.favorite.FavoriteScreen
 import com.maeumdeungbul.quotes.ui.home.HomeScreen
+import com.maeumdeungbul.quotes.ui.meditation.BreathingScreen
+import com.maeumdeungbul.quotes.ui.meditation.MeditationCompleteScreen
+import com.maeumdeungbul.quotes.ui.meditation.MeditationHistoryScreen
 import com.maeumdeungbul.quotes.ui.meditation.MeditationScreen
+import com.maeumdeungbul.quotes.ui.meditation.MeditationSessionScreen
+import com.maeumdeungbul.quotes.ui.quotes.QuoteDetailScreen
 import com.maeumdeungbul.quotes.ui.quotes.QuotesScreen
+import com.maeumdeungbul.quotes.ui.settings.LicensesScreen
 import com.maeumdeungbul.quotes.ui.settings.SettingsScreen
 import kotlin.reflect.KClass
 
@@ -21,6 +28,9 @@ fun MaeumNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+    val openQuote: (Long) -> Unit = { id -> navController.navigate(QuoteDetailRoute(id)) }
+    val back: () -> Unit = { navController.popBackStack() }
+
     NavHost(
         navController = navController,
         startDestination = HomeRoute,
@@ -28,13 +38,61 @@ fun MaeumNavHost(
     ) {
         composable<HomeRoute> {
             HomeScreen(
+                onQuoteClick = openQuote,
+                onCategoryClick = { categoryId -> navController.navigate(QuotesRoute(categoryId)) },
                 onStartMeditation = { navController.navigateToTopLevel(TopLevelDestination.MEDITATION) },
             )
         }
-        composable<QuotesRoute> { QuotesScreen() }
-        composable<MeditationRoute> { MeditationScreen() }
-        composable<FavoriteRoute> { FavoriteScreen() }
-        composable<SettingsRoute> { SettingsScreen() }
+        composable<QuotesRoute> { entry ->
+            val route = entry.toRoute<QuotesRoute>()
+            QuotesScreen(
+                initialCategoryId = route.categoryId,
+                onQuoteClick = openQuote,
+                // 홈의 카테고리에서 들어온 경우에만 뒤로가기 버튼을 보여 준다.
+                onBack = if (route.categoryId != null) back else null,
+            )
+        }
+        composable<QuoteDetailRoute> { entry ->
+            QuoteDetailScreen(
+                quoteId = entry.toRoute<QuoteDetailRoute>().quoteId,
+                onBack = back,
+                onQuoteClick = openQuote,
+            )
+        }
+        composable<FavoriteRoute> { FavoriteScreen(onQuoteClick = openQuote) }
+
+        composable<MeditationRoute> {
+            MeditationScreen(
+                onStartSession = { navController.navigate(MeditationSessionRoute) { launchSingleTop = true } },
+                onOpenBreathing = { navController.navigate(BreathingRoute) },
+                onOpenHistory = { navController.navigate(MeditationHistoryRoute) },
+            )
+        }
+        composable<MeditationSessionRoute> {
+            MeditationSessionScreen(
+                onFinished = {
+                    navController.navigate(MeditationCompleteRoute) {
+                        popUpTo<MeditationSessionRoute> { inclusive = true }
+                    }
+                },
+                onExit = back,
+            )
+        }
+        composable<MeditationCompleteRoute> {
+            MeditationCompleteScreen(
+                onOpenHistory = {
+                    navController.navigate(MeditationHistoryRoute) {
+                        popUpTo<MeditationCompleteRoute> { inclusive = true }
+                    }
+                },
+                onDone = back,
+            )
+        }
+        composable<BreathingRoute> { BreathingScreen(onBack = back) }
+        composable<MeditationHistoryRoute> { MeditationHistoryScreen(onBack = back) }
+
+        composable<SettingsRoute> { SettingsScreen(onOpenLicenses = { navController.navigate(LicensesRoute) }) }
+        composable<LicensesRoute> { LicensesScreen(onBack = back) }
     }
 }
 

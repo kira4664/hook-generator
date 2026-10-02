@@ -1,0 +1,89 @@
+{
+  "categories": [
+    {
+      "id": "mind",
+      "name": "마음",
+      "sortOrder": 1
+    },
+    {
+      "id": "happiness",
+      "name": "행복",
+      "sortOrder": 2
+    },
+    {
+      "id": "life",
+      "name": "인생",
+      "sortOrder": 3
+    },
+    {
+      "id": "love",
+      "name": "사랑",
+      "sortOrder": 4
+    },
+    {
+      "id": "relationship",
+      "name": "관계",
+      "sortOrder": 5
+    },
+    {
+      "id": "desire",
+      "name": "욕심",
+      "sortOrder": 6
+    },
+    {
+      "id": "anger",
+      "name": "분노",
+      "sortOrder": 7
+    },
+    {
+      "id": "worry",
+      "name": "걱정",
+      "sortOrder": 8
+    },
+    {
+      "id": "suffering",
+      "name": "고통",
+      "sortOrder": 9
+    },
+    {
+      "id": "forgiveness",
+      "name": "용서",
+      "sortOrder": 10
+    },
+    {
+      "id": "gratitude",
+      "name": "감사",
+      "sortOrder": 11
+    },
+    {
+      "id": "wisdom",
+      "name": "지혜",
+      "sortOrder": 12
+    },
+    {
+      "id": "practice",
+      "name": "수행",
+      "sortOrder": 13
+    },
+    {
+      "id": "meditation",
+      "name": "명상",
+      "sortOrder": 14
+    },
+    {
+      "id": "compassion",
+      "name": "자비",
+      "sortOrder": 15
+    },
+    {
+      "id": "causation",
+      "name": "인연",
+      "sortOrder": 16
+    },
+    {
+      "id": "life_death",
+      "name": "삶과 죽음",
+      "sortOrder": 17
+    }
+  ]
+}

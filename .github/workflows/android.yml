@@ -1,0 +1,64 @@
+name: Android CI
+
+on:
+  push:
+    paths:
+      - "buddha-quotes-android/**"
+      - ".github/workflows/android.yml"
+  pull_request:
+    paths:
+      - "buddha-quotes-android/**"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: buddha-quotes-android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Validate content
+        run: python3 tools/validate_content.py
+
+      - name: Unit tests
+        run: ./gradlew --stacktrace testDebugUnitTest
+
+      - name: Build debug APK
+        run: ./gradlew --stacktrace assembleDebug
+
+      - name: Build release bundle (unsigned, R8)
+        run: ./gradlew --stacktrace bundleRelease
+
+      - name: Lint
+        run: ./gradlew lintDebug
+
+      - name: Upload reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            buddha-quotes-android/app/build/reports/
+            buddha-quotes-android/app/build/test-results/
+          if-no-files-found: ignore
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: buddha-quotes-android/app/build/outputs/apk/debug/*.apk

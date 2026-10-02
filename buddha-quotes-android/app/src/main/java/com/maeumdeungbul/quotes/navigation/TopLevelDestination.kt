@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.maeumdeungbul.quotes.R
+import kotlin.reflect.KClass
 
 sealed interface NavIcon {
     data class Vector(val imageVector: ImageVector) : NavIcon
@@ -19,12 +20,13 @@ sealed interface NavIcon {
  */
 enum class TopLevelDestination(
     val route: Any,
+    val routeClass: KClass<*>,
     @StringRes val labelRes: Int,
     val icon: NavIcon,
 ) {
-    HOME(HomeRoute, labelRes = R.string.nav_home, icon = NavIcon.Vector(Icons.Filled.Home)),
-    QUOTES(QuotesRoute, labelRes = R.string.nav_quotes, icon = NavIcon.Resource(R.drawable.ic_nav_quotes)),
-    MEDITATION(MeditationRoute, labelRes = R.string.nav_meditation, icon = NavIcon.Resource(R.drawable.ic_nav_meditation)),
-    FAVORITE(FavoriteRoute, labelRes = R.string.nav_favorite, icon = NavIcon.Vector(Icons.Filled.Favorite)),
-    SETTINGS(SettingsRoute, labelRes = R.string.nav_settings, icon = NavIcon.Vector(Icons.Filled.Settings)),
+    HOME(HomeRoute, HomeRoute::class, R.string.nav_home, NavIcon.Vector(Icons.Filled.Home)),
+    QUOTES(QuotesRoute(), QuotesRoute::class, R.string.nav_quotes, NavIcon.Resource(R.drawable.ic_nav_quotes)),
+    MEDITATION(MeditationRoute, MeditationRoute::class, R.string.nav_meditation, NavIcon.Resource(R.drawable.ic_nav_meditation)),
+    FAVORITE(FavoriteRoute, FavoriteRoute::class, R.string.nav_favorite, NavIcon.Vector(Icons.Filled.Favorite)),
+    SETTINGS(SettingsRoute, SettingsRoute::class, R.string.nav_settings, NavIcon.Vector(Icons.Filled.Settings)),
 }
