@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose 바깥(창 배경, 스플래시, 런처 아이콘)에서만 사용. 앱 UI 색상은 ui/theme/Color.kt 에서 관리한다. -->
+    <color name="window_background">#FFFBF7F0</color>
+    <color name="splash_icon">#FF6B4F36</color>
+    <color name="launcher_background">#FF6B4F36</color>
+    <color name="launcher_foreground">#FFFBF1E3</color>
+</resources>

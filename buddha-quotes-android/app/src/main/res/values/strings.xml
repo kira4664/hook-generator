@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">마음등불</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">홈</string>
+    <string name="nav_quotes">말씀</string>
+    <string name="nav_meditation">명상</string>
+    <string name="nav_favorite">즐겨찾기</string>
+    <string name="nav_settings">설정</string>
+
+    <!-- 홈 -->
+    <string name="home_today_quote_label">오늘의 말씀</string>
+    <string name="home_today_quote_preparing">오늘의 말씀을 준비하고 있습니다.</string>
+    <string name="home_start_meditation">명상 시작</string>
+    <string name="home_meditation_hint">잠시 멈추고 호흡에 머물러 보세요.</string>
+
+    <!-- 말씀 -->
+    <string name="quotes_title">말씀</string>
+    <string name="quotes_preparing">말씀 목록을 준비하고 있습니다.</string>
+
+    <!-- 명상 -->
+    <string name="meditation_title">명상</string>
+    <string name="meditation_preparing">명상 타이머와 호흡 명상을 준비하고 있습니다.</string>
+
+    <!-- 즐겨찾기 -->
+    <string name="favorite_title">내가 저장한 말씀</string>
+    <string name="favorite_empty_title">아직 저장한 말씀이 없습니다.</string>
+    <string name="favorite_empty_description">마음에 드는 말씀의 ♡ 버튼을 눌러보세요.</string>
+
+    <!-- 설정 -->
+    <string name="settings_title">설정</string>
+    <string name="settings_section_general">일반</string>
+    <string name="settings_section_info">정보</string>
+    <string name="settings_notification">알림 설정</string>
+    <string name="settings_font_size">글자 크기</string>
+    <string name="settings_dark_mode">다크모드</string>
+    <string name="settings_quote_background">명언 배경</string>
+    <string name="settings_meditation_sound">명상 사운드</string>
+    <string name="settings_reset_data">데이터 초기화</string>
+    <string name="settings_privacy_policy">개인정보처리방침</string>
+    <string name="settings_terms">이용약관</string>
+    <string name="settings_licenses">오픈소스 라이선스</string>
+    <string name="settings_contact">문의하기</string>
+    <string name="settings_app_version">앱 버전</string>
+    <string name="settings_coming_soon">준비 중</string>
+</resources>
