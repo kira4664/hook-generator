@@ -301,7 +301,6 @@ data class Quote(
 ### quotes_ko.json
 ```json
 {
-  "contentVersion": 1,
   "quotes": [
     {
       "id": 1,
@@ -319,12 +318,11 @@ data class Quote(
   ]
 }
 ```
-배열을 객체로 감싸서 `contentVersion`을 둔다. 앱을 업데이트할 때 버전이 올라가 있으면 `quotes`와 `categories`만 upsert하고, 즐겨찾기와 기록은 보존한다.
+콘텐츠 버전은 `manifest.json` 한 곳에서 관리한다. 앱을 업데이트할 때 버전이 올라가 있으면 `quotes`와 `categories`만 upsert하고, 즐겨찾기와 기록은 보존한다.
 
 ### categories.json
 ```json
 {
-  "contentVersion": 1,
   "categories": [
     { "id": "mind", "name": "마음", "sortOrder": 1 },
     { "id": "happiness", "name": "행복", "sortOrder": 2 }
@@ -352,11 +350,15 @@ data class Quote(
 ```
 `solarDates`에는 공식 자료로 검증한 연도만 넣는다. 확인하지 못한 연도는 비워 두고, 앱은 "음력 4월 8일"만 표시한다.
 
-### sounds.json (명상 음원 메타)
+### 명상 음원
+음원은 R8 리소스 축소에서 안전하도록 JSON 대신 `playback/MeditationSound.kt` 에서 `R.raw` 로 연결한다.
+음원 파일(`res/raw/`)은 **직접 녹음했거나 라이선스가 명확한 것만** 넣는다. 파일이 연결되지 않은 사운드는 목록에서 자동으로 숨긴다(무음은 항상 제공한다).
+
+### manifest.json
 ```json
-{ "sounds": [ { "id": "rain", "name": "빗소리", "file": "rain.ogg", "license": "자체 녹음", "attribution": null } ] }
+{ "contentVersion": 1 }
 ```
-음원 파일(`res/raw/`)은 **직접 녹음했거나 라이선스가 명확한 것만** 넣는다. 파일이 없는 사운드는 목록에서 자동으로 숨긴다(무음은 항상 제공한다).
+앱 시작 시 이 작은 파일만 읽어 저장된 버전과 비교하고, 버전이 올라갔을 때만 전체 JSON 을 파싱해 시드한다.
 
 ---
 
@@ -468,3 +470,13 @@ com.maeumdeungbul.quotes
 14. **접근성 · 품질**: TalkBack 라벨, 터치 영역 48dp, 명암 대비 4.5:1, 글꼴 200% 확대를 점검한다. Pre-launch report의 경고를 해결한다.
 15. **건강 관련 표현**: 명상 효과를 의학적 치료처럼 표현하지 않는다(건강 앱 정책).
 16. **스토어 등록정보**: 한국어를 기본 언어로 한다. 스크린샷은 실제 앱 화면이어야 한다. 아이콘은 512×512, 그래픽 이미지는 1024×500.
+
+---
+
+## 구현 메모 (설계 대비 변경점)
+
+- 오늘의 말씀 날짜·id 는 DataStore 대신 Room `daily_quote_history` 테이블에 저장한다(앱·알림 Worker 가 같은 값을 사용하고, 최근 30일 중복을 피하기 위함).
+- 명상 기록 달력은 1차에 포함했다(명상 기록 화면).
+- 오픈소스 라이선스는 외부 라이브러리 대신 `assets/data/licenses.json` 목록으로 표시한다. 의존성을 추가하면 이 파일도 갱신한다.
+- 매일 알림은 일회성 WorkRequest 를 실행할 때마다 다음 날로 다시 예약해, 주기 작업의 시간 오차가 쌓이지 않게 했다. 같은 날 중복 알림은 `last_notified_date` 로 막는다.
+- 무음 명상은 포그라운드 서비스 없이 화면 켜짐 유지로 진행한다(타이머는 단조 시계 기준이라 화면 복귀 시 정확히 다시 계산된다). 배경음이 있으면 Media3 서비스가 백그라운드 재생을 유지한다.
