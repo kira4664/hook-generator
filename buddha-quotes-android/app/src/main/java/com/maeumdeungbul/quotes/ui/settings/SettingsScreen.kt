@@ -299,7 +299,7 @@ private fun LinkRow(@StringRes titleRes: Int, target: String, onOpen: (String) -
 private fun <T> ChoiceDialog(
     title: String,
     options: List<T>,
-    selected: T,
+    selected: T?,
     label: @Composable (T) -> String,
     onSelect: (T) -> Unit,
     onDismiss: () -> Unit,
